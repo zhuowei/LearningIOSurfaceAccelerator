@@ -6,7 +6,19 @@ Doesn't work yet: gets this error in kernel log:
 mapAPIParams System error: Failure to prepare comm API outbound data memory descriptor: 0xe00002de
 ```
 
+This calls the userspace IOSurfaceAccelerator framework instead of calling the userclient directly: I didn't want to figure out the layout of the userclient's TransformSurfaceData argument.
+
 # Notes
+
+Other documentation about the IOSurfaceAccelerator framework and AppleM2ScalerCSC driver:
+
+- https://iphonedevwiki.net/index.php/IOSurfaceAccelerator
+- https://github.com/WebKit/WebKit/commit/5e7ebb4f4f0592ad2911b8eb84da81ba900b0f4a
+- https://muirey03.blogspot.com/2020/09/cve-2020-9964-ios-infoleak.html?m=1
+- https://i.blackhat.com/us-18/Wed-August-8/us-18-Chen-KeenLab-iOS-Jailbreak-Internals-wp.pdf
+
+
+Notes about how the comm output api works:
 
 ```
 M2ScalerScalingASEControl::collectASEApiOutput_gatedContext
