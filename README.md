@@ -1,6 +1,6 @@
 Learning IOSurfaceAccelerator's comm output API.
 
-Currently crashes with a (non-exploitable) null pointer dereference with ASE (Apple Scaling Engine???) enabled, since I don't know how to use ASEProcessing to generate a set of valid ASE inbound params.
+Currently crashes on macOS 13 beta 22A5266r with a (non-exploitable) null pointer dereference with ASE (Apple Scaling Engine???) enabled, since I don't know how to use ASEProcessing to generate a set of valid ASE inbound params.
 
 This calls the userspace IOSurfaceAccelerator framework instead of calling the userclient directly: I didn't want to figure out the layout of the userclient's TransformSurfaceData argument.
 
