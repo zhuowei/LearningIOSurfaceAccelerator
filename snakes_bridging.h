@@ -7,6 +7,7 @@
 typedef struct __IOSurfaceAccelerator *IOSurfaceAcceleratorRef;
 
 extern const CFStringRef kIOSurfaceAcceleratorUnwireSurfaceKey;
+extern const CFStringRef _Nonnull kIOSurfaceAcceleratorComm;
 
 IOReturn IOSurfaceAcceleratorCreate(CFAllocatorRef, CFDictionaryRef properties, IOSurfaceAcceleratorRef* acceleratorOut);
 CFRunLoopSourceRef IOSurfaceAcceleratorGetRunLoopSource(IOSurfaceAcceleratorRef);
@@ -20,4 +21,3 @@ typedef struct IOSurfaceAcceleratorCompletion {
 } IOSurfaceAcceleratorCompletion;
 
 IOReturn IOSurfaceAcceleratorTransformSurface(IOSurfaceAcceleratorRef, IOSurfaceRef sourceBuffer, IOSurfaceRef destinationBuffer, CFDictionaryRef options, void* pCropRectangles, IOSurfaceAcceleratorCompletion* pCompletion, void* pSwap, uint32_t* pCommandID);
-
