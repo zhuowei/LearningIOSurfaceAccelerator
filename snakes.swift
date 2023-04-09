@@ -11,10 +11,25 @@ struct CommArg {
   let unused20: Int64  // 0x20
 }
 
+// Not supported on M1 Mac Mini
+let kInboundTypeASELegacy = 1
+// Not supported on M1 Mac Mini
+let kInboundTypeHDRLegacy = 2
+// ???
+let kInboundTypeHDR = 3
+// Args constructed by ASEProcessing - CA::ASEScalerStatistics::create_iosa_params(__IOSurface*, __IOSurface*)
+let kInboundTypeASE = 4
+
+// Hardcoded length = 0x17c
+let kOutboundTypeASE = 1
+// Hardcoded length = 0x1008
+let kOutboundTypeHDR = 2
+
 func snakesOnAPlane() {
+  // ASE prints an error if width/height < 32
   guard
     let sourceSurface = IOSurface(properties: [
-      .width: 16, .height: 16, .pixelFormat: kCVPixelFormatType_32BGRA,
+      .width: 32, .height: 32, .pixelFormat: kCVPixelFormatType_32BGRA,
     ])
   else {
     print("source surface is null")
@@ -22,7 +37,7 @@ func snakesOnAPlane() {
   }
   guard
     let destinationSurface = IOSurface(properties: [
-      .width: 16, .height: 16, .pixelFormat: kCVPixelFormatType_32BGRA,
+      .width: 32, .height: 32, .pixelFormat: kCVPixelFormatType_32BGRA,
     ])
   else {
     print("dest surface is null")
@@ -39,16 +54,26 @@ func snakesOnAPlane() {
     print("accelerator null")
     return
   }
+  let firstMutableInput = NSMutableData(length: 0x4000)!
+  let firstMutableOutput = NSMutableData(length: 0x4000)!
+  let inboundAddress = UInt64(UInt(bitPattern: firstMutableInput.mutableBytes))
+  let outboundAddress = UInt64(UInt(bitPattern: firstMutableOutput.mutableBytes))
   #if false
-    let firstMutableOutput = NSMutableData(length: 0x4000)!
-    let outboundAddress = UInt64(UInt(bitPattern: firstMutableOutput.mutableBytes))
+    var firstCommArg = CommArg(
+      inboundType: Int32(kInboundTypeASE), inboundAddress: inboundAddress,
+      inboundSize: Int32(firstMutableInput.length), outboundType: Int32(kOutboundTypeASE),
+      outboundAddress: outboundAddress, unused20: 0)
   #endif
-  let outboundAddress = UInt64(1)
   var firstCommArg = CommArg(
-    inboundType: 0, inboundAddress: 0, inboundSize: 0, outboundType: 1,
+    inboundType: 0, inboundAddress: inboundAddress, inboundSize: Int32(firstMutableInput.length),
+    outboundType: 1,
     outboundAddress: outboundAddress, unused20: 0)
   let firstData = Data(bytes: &firstCommArg, count: MemoryLayout.size(ofValue: firstCommArg))
-  let transformOptions: [String: Any] = [String(kIOSurfaceAcceleratorComm): [firstData]]
+  // kIOSurfaceAcceleratorDirectionalScalingEnable turns on ASE
+  let transformOptions: [String: Any] = [
+    String(kIOSurfaceAcceleratorDirectionalScalingEnable): true,
+    String(kIOSurfaceAcceleratorComm): [firstData],
+  ]
   err = IOSurfaceAcceleratorTransformSurface(
     accelerator, sourceSurface, destinationSurface, /*options=*/
     transformOptions as CFDictionary, /*pCropRectangles=*/

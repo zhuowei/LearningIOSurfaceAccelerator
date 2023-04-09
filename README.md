@@ -1,10 +1,6 @@
 Learning IOSurfaceAccelerator's comm output API.
 
-Doesn't work yet: gets this error in kernel log:
-
-```
-mapAPIParams System error: Failure to prepare comm API outbound data memory descriptor: 0xe00002de
-```
+Currently crashes with a (non-exploitable) null pointer dereference with ASE (Apple Scaling Engine???) enabled, since I don't know how to use ASEProcessing to generate a set of valid ASE inbound params.
 
 This calls the userspace IOSurfaceAccelerator framework instead of calling the userclient directly: I didn't want to figure out the layout of the userclient's TransformSurfaceData argument.
 

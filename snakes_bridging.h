@@ -8,6 +8,8 @@ typedef struct __IOSurfaceAccelerator *IOSurfaceAcceleratorRef;
 
 extern const CFStringRef kIOSurfaceAcceleratorUnwireSurfaceKey;
 extern const CFStringRef _Nonnull kIOSurfaceAcceleratorComm;
+extern const CFStringRef _Nonnull kIOSurfaceAcceleratorHDREnable;
+extern const CFStringRef _Nonnull kIOSurfaceAcceleratorDirectionalScalingEnable;
 
 IOReturn IOSurfaceAcceleratorCreate(CFAllocatorRef, CFDictionaryRef properties, IOSurfaceAcceleratorRef* acceleratorOut);
 CFRunLoopSourceRef IOSurfaceAcceleratorGetRunLoopSource(IOSurfaceAcceleratorRef);
