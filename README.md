@@ -26,6 +26,14 @@ M2ScalerScalingASEControl::collectASEApiOutput_gatedContext
 
 The length (0xa60 in 13.3.1) is written in __ZN18M2ScalerCSCRequest28validateAndInitializeCommAPIEPK19AppleM2ScalerCSCHal
 
+also written in
+__ZN30M2ScalerScalingASEControlMSR1024getASEStats_gatedContextEP18M2ScalerCSCRequest
+
+length read in
+__ZN25M2ScalerScalingASEControl24getASEStats_gatedContextEP18M2ScalerCSCRequest
+
+-> __ZN22AppleM2ScalerCSCDriver24perfControllerWorkSubmitEP18M2ScalerCSCRequest might also write to it??
+
 For getting the memory used by the ASE/HDR APIs:
 Probably M2ScalerCSCRequest::mapAPIParams since this mentions "HDR/ASE API ERROR" -> reads from 0x910, etc to make memory descriptors
 -> M2ScalerCSCRequest::validateAndInitializeCommAPI
